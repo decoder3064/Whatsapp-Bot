@@ -1,0 +1,20 @@
+whatsapp-reminder-bot/
+│
+├── app.py                  # Main Flask app, initializes routes and Celery
+├── config.py               # Loads environment variables (Twilio, DB, Redis)
+├── database.py             # DB connection and setup (optional for raw psycopg2)
+├── tasks.py                # Celery tasks: send reminder to workers
+├── requirements.txt        # Project dependencies
+├── README.md               # Project documentation
+├── .env                    # Environment variables (Twilio, DB, Redis creds)
+│
+├── models/
+│   └── worker.py           # SQLAlchemy Worker model (no separate reminder model)
+│
+├── routes/
+│   └── workers.py          # API routes: add worker, list workers
+│
+├── utils/
+│   └── scheduler.py        # Optional: logic to fetch workers, run schedule
+│
+└── venv/                   # Virtual environment (ignored by Git)
