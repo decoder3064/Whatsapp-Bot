@@ -1,0 +1,14 @@
+# Ignore environment files
+.env
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+venv/
+
+# macOS system files
+.DS_Store
+
