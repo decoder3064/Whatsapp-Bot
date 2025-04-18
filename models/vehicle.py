@@ -13,3 +13,6 @@ class Vehicle(db.Model):
 
     def __repr__(self):
         return f'<Vehicle {self.make} {self.model} {self.year}>'
+    
+
+    

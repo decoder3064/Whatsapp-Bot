@@ -3,6 +3,7 @@ from models.vehicle import db
 from flask.cli import with_appcontext
 import os
 import click
+from routes.vehicles import vehicles_bp
 
 app = Flask(__name__)
 
@@ -12,25 +13,13 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize the database with the app
 db.init_app(app)
+#app.run(debug=True)
 
 @app.route('/')
 def home():
     return "Flask app is running and connected to the vehicle table"
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+app.register_blueprint(vehicles_bp)
 
 
 # Flask CLI command to initialize the database
@@ -56,4 +45,8 @@ def add_mock_data_command():
 # Register the CLI commands
 app.cli.add_command(init_db_command)
 app.cli.add_command(add_mock_data_command)
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
 
