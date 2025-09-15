@@ -5,6 +5,9 @@ import os
 import click
 from routes.vehicles import vehicles_bp
 
+
+from config import REDIS_URL
+
 app = Flask(__name__)
 
 # Configure the database
@@ -41,7 +44,7 @@ def add_mock_data_command():
     db.session.add(vehicle)
     db.session.commit()
     click.echo('Added mock data to the database.')
-
+''
 # Register the CLI commands
 app.cli.add_command(init_db_command)
 app.cli.add_command(add_mock_data_command)

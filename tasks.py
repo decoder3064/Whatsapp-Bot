@@ -1,5 +1,18 @@
 from utils.twilio_client import send_sms
+from celery import Celery
+import os
+from dotenv import load_dotenv
 
 
-send_sms("whatsapp:+18593121167", "Hey there, oil change reminder!")
+load_dotenv()
+
+celery = Celery('tasks', broker=os.getenv('REDIS_URL'), backend=os.getenv('REDIS_URL'))
+
+
+@celery.task
+def send_reminder(to , message):
+    """
+    Send a reminder message using Twilio.
+    """
+    return send_sms(to, message)
 
