@@ -15,7 +15,6 @@ class Reminder(db.Model):
     sent_at = db.Column(db.DateTime, nullable=True)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
-
    
     def __repr__(self):
         vehicle_info = f" for Vehicle {self.vehicle_id}" if self.vehicle_id else ""
