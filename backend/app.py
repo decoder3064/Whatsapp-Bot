@@ -6,12 +6,12 @@ import click
 from routes.vehicles import vehicles_bp
 
 
-from config import REDIS_URL
+from backend.config import REDIS_URL
 
 app = Flask(__name__)
 
 # Configure the database
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.abspath("instance/vehicles.db")}'
+app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql:///{os.path.abspath("instance/vehicles.db")}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize the database with the app
@@ -24,6 +24,15 @@ def home():
 
 app.register_blueprint(vehicles_bp)
 
+
+
+
+
+
+
+
+
+#CLIs
 
 # Flask CLI command to initialize the database
 @click.command('init-db')
