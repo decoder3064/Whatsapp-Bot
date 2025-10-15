@@ -4,7 +4,7 @@ from utils.twilio_client import send_sms
 
 
 
-vehicles_bp = Blueprint('vehicles', __name__)
+vehicles_bp = Blueprint('vehicles', __name__, url_prefix='/api/vehicles')
 
 
 #POST ROUTE
@@ -16,7 +16,6 @@ def add_vehicle():
     try:
         vehicle = Vehicle(
             driver_id=data['driver_id'],
-            phone=data['phone'],
             make=data['make'],
             model=data['model'],
             plate=data['plate'],
@@ -41,7 +40,6 @@ def get_vehicles():
             'driver':{
                 'id':v.driver.id,
                 'name': v.driver.name,
-                'phone': v.driver.phone,
             },
             'make': v.make,
             'model': v.model,
@@ -60,7 +58,6 @@ def get_vehicle(vehicle_id):
             'driver':{
                 'id':vehicle.driver.id,
                 'name': vehicle.driver.name,
-                'phone': vehicle.driver.phone,
             },
             'make': vehicle.make,
             'model': vehicle.model,
@@ -75,23 +72,23 @@ def update_vehicle(vehicle_id):
     data = request.get_json()
 
 
-    if 'dirver_id' in data:
+    if 'driver_id' in data:
         vehicle.driver_id = data['driver_id']
     if 'make' in data: 
         vehicle.make = data['make']
     if 'model' in data:
-        vehicle.driver_id = data['model']
+        vehicle.model = data['model']
     if 'plate' in data: 
-        vehicle.make = data['plate']
+        vehicle.plate = data['plate']
     if 'year' in data:
-        vehicle.driver_id = data['year']
+        vehicle.year = data['year']
     
     db.session.commit()
     return jsonify({'message': 'Vehicle updated successfully'}), 200
 
 
 #DELETE ROUTE
-@vehicles_bp.route('/<int:vehicle_id>', methods=['DELET'])
+@vehicles_bp.route('/<int:vehicle_id>', methods=['DELETE'])
 def delete_vehicle(vehicle_id):
     vehicle = Vehicle.query.get_or_404(vehicle_id)
     db.session.delete(vehicle)
