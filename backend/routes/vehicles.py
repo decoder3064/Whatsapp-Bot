@@ -6,6 +6,8 @@ from utils.twilio_client import send_sms
 
 vehicles_bp = Blueprint('vehicles', __name__)
 
+
+#POST ROUTE
 @vehicles_bp.route('/add_vehicle', methods=['POST'])
 def add_vehicle():
     data = request.get_json()
@@ -13,7 +15,7 @@ def add_vehicle():
         return jsonify({'error': 'No input data provided'}), 400
     try:
         vehicle = Vehicle(
-            driver=data['driver'],
+            driver_id=data['driver_id'],
             phone=data['phone'],
             make=data['make'],
             model=data['model'],
@@ -22,42 +24,83 @@ def add_vehicle():
         )
         db.session.add(vehicle)
         db.session.commit()
-        return jsonify({'message': 'Vehicle added successfully'}), 201
+        return jsonify({'message': 'Vehicle added successfully',
+                        'id': vehicle.id}), 201
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
     
 
-
+# GET ROUTES 
 @vehicles_bp.route('/get_vehicles', methods=['GET'])    
 def get_vehicles():
     vehicles = Vehicle.query.all()
     result = [
         {
             'id': v.id,
-            'driver': v.driver,
-            'phone': v.phone,
+            'driver':{
+                'id':v.driver.id,
+                'name': v.driver.name,
+                'phone': v.driver.phone,
+            },
             'make': v.make,
             'model': v.model,
             'plate': v.plate,
             'year': v.year
         } 
-        for v in vehicles
-    ]
-    return jsonify(result)
+        for v in vehicles]
+    return jsonify(result), 200
 
+@vehicles_bp.route('/<int:vehicle_id>', methods=['GET'])
+def get_vehicle(vehicle_id):
+    vehicle = Vehicle.query.get_or_404(vehicle_id)
+    return jsonify(
+        {
+            'id': vehicle.id,
+            'driver':{
+                'id':vehicle.driver.id,
+                'name': vehicle.driver.name,
+                'phone': vehicle.driver.phone,
+            },
+            'make': vehicle.make,
+            'model': vehicle.model,
+            'plate': vehicle.plate,
+            'year': vehicle.year
+        }),200
 
-@vehicles_bp.route('/test_whatsapp', methods=['POST'])
-def test_whatsapp():
+#UPDATE ROUTE
+@vehicles_bp.route('/<int:vehicle_id>', methods=['PUT'])
+def update_vehicle(vehicle_id):
+    vehicle = Vehicle.query.get_or_404(vehicle_id)
     data = request.get_json()
-    phone = data.get('phone')
-    message = data.get('message')
 
-    if not phone or not message:
-        return jsonify({'error': 'Phone number and message are required'}), 400
+
+    if 'dirver_id' in data:
+        vehicle.driver_id = data['driver_id']
+    if 'make' in data: 
+        vehicle.make = data['make']
+    if 'model' in data:
+        vehicle.driver_id = data['model']
+    if 'plate' in data: 
+        vehicle.make = data['plate']
+    if 'year' in data:
+        vehicle.driver_id = data['year']
     
-    send_sms(phone, message)
-    return jsonify({'message': 'WhatsApp message sent successfully'}), 200
+    db.session.commit()
+    return jsonify({'message': 'Vehicle updated successfully'}), 200
+
+
+#DELETE ROUTE
+@vehicles_bp.route('/<int:vehicle_id>', methods=['DELET'])
+def delete_vehicle(vehicle_id):
+    vehicle = Vehicle.query.get_or_404(vehicle_id)
+    db.session.delete(vehicle)
+    db.session.commit()
+    return jsonify({'message':'Vehicle deleted successfully'}),200
+  
+    
+
+
 
 
    

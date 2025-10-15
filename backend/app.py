@@ -1,17 +1,16 @@
 from flask import Flask
-from models.vehicle import db
+from models import db
 from flask.cli import with_appcontext
 import os
 import click
 from routes.vehicles import vehicles_bp
-
-
-from backend.config import REDIS_URL
+from dotenv import load_dotenv
+from config import REDIS_URL
 
 app = Flask(__name__)
 
 # Configure the database
-app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql:///{os.path.abspath("instance/vehicles.db")}'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://localhost/whatsapp_bot')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize the database with the app
@@ -22,6 +21,8 @@ db.init_app(app)
 def home():
     return "Flask app is running and connected to the vehicle table"
 
+app.register_blueprint(reminders_bp)
+app.register_blueprint(workers_bp)
 app.register_blueprint(vehicles_bp)
 
 
