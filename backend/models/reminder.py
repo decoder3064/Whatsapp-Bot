@@ -13,6 +13,7 @@ class Reminder(db.Model):
     message = db.Column(db.Text, nullable=False)
     status = db.Column(db.String(20), default='pending') 
     sent_at = db.Column(db.DateTime, nullable=True)
+    completed_at = db.Column(db.DateTime, nullable=True)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
    

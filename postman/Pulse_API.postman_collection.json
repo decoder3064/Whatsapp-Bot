@@ -1,0 +1,573 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "Pulse API",
+		"description": "Complete API collection for the Pulse fleet management backend (Flask, localhost:5000).",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5000/api"
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	],
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"admin\",\n\t\"email\": \"admin@pulse.com\",\n\t\"password\": \"admin123\",\n\t\"role\": \"admin\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "register"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.collectionVariables.set(\"token\", jsonData.token);",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"admin\",\n\t\"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "login"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth/me",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "me"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth/users",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "users"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Role (Admin)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"role\": \"viewer\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/users/1",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "users", "1"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Workers",
+			"item": [
+				{
+					"name": "Create Worker",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Carlos Rodriguez\",\n\t\"phone\": \"+15551234567\",\n\t\"email\": \"carlos@example.com\",\n\t\"role\": \"driver\",\n\t\"givingServiceTo\": \"Amazon Fleet\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/workers",
+							"host": ["{{base_url}}"],
+							"path": ["workers"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Workers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/workers",
+							"host": ["{{base_url}}"],
+							"path": ["workers"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Worker by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/workers/1",
+							"host": ["{{base_url}}"],
+							"path": ["workers", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Worker",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"role\": \"mechanic\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/workers/1",
+							"host": ["{{base_url}}"],
+							"path": ["workers", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Worker",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/workers/1",
+							"host": ["{{base_url}}"],
+							"path": ["workers", "1"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Vehicles",
+			"item": [
+				{
+					"name": "Create Vehicle",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"driver_id\": 1,\n\t\"make\": \"Toyota\",\n\t\"model\": \"Camry\",\n\t\"plate\": \"ABC123\",\n\t\"year\": 2022\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/vehicles",
+							"host": ["{{base_url}}"],
+							"path": ["vehicles"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Vehicles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/vehicles",
+							"host": ["{{base_url}}"],
+							"path": ["vehicles"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Vehicle by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/vehicles/1",
+							"host": ["{{base_url}}"],
+							"path": ["vehicles", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Vehicle",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"year\": 2023\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/vehicles/1",
+							"host": ["{{base_url}}"],
+							"path": ["vehicles", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Vehicle",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/vehicles/1",
+							"host": ["{{base_url}}"],
+							"path": ["vehicles", "1"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reminders",
+			"item": [
+				{
+					"name": "Create Reminder",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"assigned_worker_id\": 1,\n\t\"vehicle_id\": 1,\n\t\"reminder_type\": \"oil_change\",\n\t\"scheduled_date\": \"2025-06-15\",\n\t\"message\": \"Your Toyota Camry is due for an oil change.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/reminders",
+							"host": ["{{base_url}}"],
+							"path": ["reminders"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Reminders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/reminders",
+							"host": ["{{base_url}}"],
+							"path": ["reminders"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Reminders by Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/reminders?status=pending",
+							"host": ["{{base_url}}"],
+							"path": ["reminders"],
+							"query": [
+								{
+									"key": "status",
+									"value": "pending"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Reminder by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/reminders/1",
+							"host": ["{{base_url}}"],
+							"path": ["reminders", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Reminder",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"status\": \"completed\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/reminders/1",
+							"host": ["{{base_url}}"],
+							"path": ["reminders", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Reminder",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/reminders/1",
+							"host": ["{{base_url}}"],
+							"path": ["reminders", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send Reminder",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/reminders/1/send",
+							"host": ["{{base_url}}"],
+							"path": ["reminders", "1", "send"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Metrics",
+			"item": [
+				{
+					"name": "Dashboard Overview",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/metrics/dashboard",
+							"host": ["{{base_url}}"],
+							"path": ["metrics", "dashboard"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Worker Metrics (Date Range)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/metrics/workers?from_date=2025-01-01&to_date=2025-12-31",
+							"host": ["{{base_url}}"],
+							"path": ["metrics", "workers"],
+							"query": [
+								{
+									"key": "from_date",
+									"value": "2025-01-01"
+								},
+								{
+									"key": "to_date",
+									"value": "2025-12-31"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Worker Metrics by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/metrics/workers/1",
+							"host": ["{{base_url}}"],
+							"path": ["metrics", "workers", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reminder Metrics (Grouped)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/metrics/reminders?group_by=day&from_date=2025-01-01&to_date=2025-01-31",
+							"host": ["{{base_url}}"],
+							"path": ["metrics", "reminders"],
+							"query": [
+								{
+									"key": "group_by",
+									"value": "day"
+								},
+								{
+									"key": "from_date",
+									"value": "2025-01-01"
+								},
+								{
+									"key": "to_date",
+									"value": "2025-01-31"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Chat",
+			"item": [
+				{
+					"name": "Send Chat Message",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"message\": \"Which workers have overdue reminders?\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/chat",
+							"host": ["{{base_url}}"],
+							"path": ["chat"]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

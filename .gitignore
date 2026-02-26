@@ -1,5 +1,6 @@
 # Ignore environment files
 .env
+backend/.env
 
 # Python cache files
 __pycache__/
@@ -8,7 +9,19 @@ __pycache__/
 
 # Virtual environment
 venv/
+backend/venv/
 
 # macOS system files
 .DS_Store
 
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# IDE
+.vscode/
+settings.json
+
+# Celery
+celerybeat-schedule
+celerybeat-schedule.db
